@@ -1,0 +1,571 @@
+<!--
+    author: guotq
+    description: ocr showcase
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>OCR IMAGECLIP</title>
+<link rel="stylesheet" href="http://192.168.186.13/deploy/Commonlibs/mui.min.css">
+<style>
+html, body {
+	touch-action: pan-y;
+}
+
+.hidden {
+	display: none;
+}
+
+.container {
+	padding: 10px;
+}
+
+.panel-image {
+	min-height: 200px;
+	text-align: center;
+}
+
+.panel-image p {
+	line-height: 200px;
+	border: 1px solid #e1e1e1;
+	border-radius: 5px;
+}
+
+.btn-sm {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.panel {
+	margin-bottom: 20px;
+	background-color: #fff;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.panel-default {
+	word-break: break-all;
+	background-color: #ddd;
+}
+
+.panel-heading {
+	padding: 10px 15px;
+	border-bottom: 1px solid transparent;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.panel-default>.panel-heading {
+	color: #333;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+}
+
+.panel-title {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-size: 16px;
+	color: inherit;
+}
+
+.panel-body {
+	padding: 15px;
+	background-color: #fff;
+}
+
+.panel-image {
+	min-height: 200px;
+	text-align: center;
+}
+
+.panel-image img {
+	width: 80%;
+}
+
+.panel-image p {
+	line-height: 200px;
+	border: 1px solid #e1e1e1;
+	border-radius: 5px;
+}
+
+.panel-default {
+	overflow: hidden;
+}
+
+.ocr-btn {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+#ocr-result {
+	font-size: 14px;
+}
+
+.imgclip-menu {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 120px;
+}
+
+.imgclip-menu ul {
+	margin-top: 0;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-bottom: 0;
+	background: transparent;
+	border: none;
+}
+
+.imgclip-menu ul li {
+	position: relative;
+	width: 60px;
+	height: 60px;
+	margin-right: 10px;
+	border: 1px solid transparent;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.imgclip-menu ul li img {
+	width: 100%;
+	height: 100%;
+}
+
+.imgclip-menu ul li em {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 20px;
+	text-align: center;
+	color: #fff;
+	text-decoration: none;
+	font-style: inherit;
+	background-color: #000;
+	opacity: .6;
+	font-size: 12px;
+	line-height: 20px;
+	z-index: 2;
+}
+
+.imgclip-menu ul li.active {
+	border: 1px solid #2fe0f7;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden
+}
+
+.clearfix { *+
+	height: 1%;
+}
+
+.l {
+	float: left;
+}
+
+.r {
+	float: right;
+}
+
+.nav-bar {
+	position: fixed;
+	z-index: 10;
+	right: 0;
+	left: 0;
+	height: 44px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-bottom: 0;
+	background-color: #f7f7f7;
+	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, .85);
+	box-shadow: 0 0 1px rgba(0, 0, 0, .85);
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.nav-bar-tab {
+	bottom: 0;
+	display: table;
+	width: 100%;
+	height: 50px;
+	padding: 0;
+	table-layout: fixed;
+	border-top: 0;
+	border-bottom: 0;
+	-webkit-touch-callout: none;
+}
+
+.tab-item {
+	display: table-cell;
+	overflow: hidden;
+	width: 1%;
+	height: 50px;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: #000;
+}
+
+.nav-bar-tab .tab-item .mui-icon ~.tab-label {
+	font-size: 11px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.rotateY180 {
+	transform: rotateY(180deg);
+}
+
+.thumbnail {
+	padding: 0;
+}
+
+.thumbnail canvas {
+	width: 60px !important;
+	height: 60px !important;
+}
+
+/* 按钮菜单 */
+.imgclip-menu-bar {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 50px;
+	height: 90px;
+	background-color: #000;
+	opacity: .8;
+	z-index: 2;
+}
+
+.mui-btn-block {
+	padding: 6px 12px;
+}
+
+.mui-input-row label {
+	width: 25%;
+	padding-right: 0;
+	padding-left: 0;
+	color: #fff;
+	text-align: center;
+}
+
+.mui-input-range label ~input[type=range] {
+	width: 75%;
+}
+
+.btn-confirm {
+	position: fixed;
+	bottom: 0;
+	margin-bottom: 0;
+}
+
+.resolve-loading, .correct-loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+/* preview-contaienr */
+.preivew-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 3;
+	background-color: rgb(34, 34, 34);
+}
+
+.preview-image {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	width: 82%;
+	transform: translate(-50%, -50%);
+}
+
+.mui-btn {
+	margin-bottom: 0;
+	margin-top: 10px;
+}
+
+.mui-btn-primary {
+	width: 200px;
+	margin-left: 10px;
+	float: left
+}
+</style>
+</head>
+
+<body>
+	<div class="container">
+		<div id="document">
+			<div style="height: 90px">
+				<div style="width: 45%; float: left">
+					<p>服务器地址</p>
+					<input type="text" name="" id="serverurl">
+				</div>
+				<div style="width: 45%; float: left; margin-left: 10px">
+					<p>选择OCR识别类型</p>
+					<select name="" id="select-type" class="mui-btn mui-btn-block">
+						<option value="0">通用识别</option>
+						<option value="1">身份证正面</option>
+						<option value="2">身份证反面</option>
+						<option value="3">营业执照</option>
+						<option value="4">开户许可证</option>
+						<option value="5">武侯营业执照</option>
+					</select>
+				</div>
+			</div>
+			<div style="height: 70px">
+				<button type="button" class="mui-btn mui-btn-block mui-btn-primary" id="demoimage" onclick="demoimageshow()">示例图片</button>
+				<button type="button" class="mui-btn mui-btn-block mui-btn-primary" id="ocr-btn" onclick="ocr()">ocr识别</button>
+				<button type="button" class="mui-btn mui-btn-block mui-btn-primary" id="reload">RELOAD PAGE</button>
+			</div>
+
+			<div class="panel panel-default" id="document-positive" style="width: 100%">
+				<div class="panel-heading">
+					<h3 class="panel-title">照片</h3>
+				</div>
+				<div class="panel-body">
+					<div class="panel-image" id="panel-image">
+						<img src="" alt="" id="preview-image">
+						<p class="image-placeholder" id="image-placeholder">点击此处上传证件照</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="hidden" id="ocr-result">
+			<div class="panel panel-default" style="margin-top: 20px;">
+				<div class="panel-body" id="panel-positive">照片OCR数据结果：</div>
+			</div>
+		</div>
+
+		<div class="hidden">
+			<canvas id="emiya"></canvas>
+			<input type="file" name="" id="upload" accept="image/*" />
+		</div>
+	</div>
+
+	<script>
+    var staticserverUrl = 'http://192.168.186.20:8000/tyocr/';
+  </script>
+
+	<script src="http://192.168.186.13/deploy/Commonlibs/mui.min.js"></script>
+	<script src="http://192.168.186.13/deploy/Commonlibs/zepto.min.js"></script>
+	<script src="http://192.168.186.13/deploy/Commonlibs/emiya-canvas.min.js"></script>
+
+	<script>
+    /*
+     * @Author: guotq
+     * @Date: 2019-02-27 14:24:13
+ * @Last Modified by: guotq
+ * @Last Modified time: 2019-03-29 16:15:24
+     * @Description: OCR IMAGECLIP
+     */
+
+    (function (global, factory) {
+      typeof exports === 'object' && module !== 'undefined' ? module.exports = factory() : typeof define ===
+        'function' && define.amd ? define(factory()) : global.imageClip = factory();
+    }(window, function () {
+      var $ = Zepto;
+
+      var $upload = $('#upload');
+      var emiyaCanvasEl = document.getElementById('emiya');
+      var emiya = new window.EmiyaCanvas();
+      var type = '0';
+      var imageSize = {
+        width: 0,
+        height: 0
+      };
+
+      var resolveLoading = document.getElementById('resolve-loading');
+      var inputServerUrl = document.getElementById('serverurl');
+      var previewImage = document.getElementById('preview-image');
+      var $panelImage = $('#panel-image');
+
+      inputServerUrl.value = getExtraDataByKey('serverurl');
+      if (inputServerUrl.value == "")
+        document.getElementById('serverurl').value = staticserverUrl;
+
+      function getRenderSize() {
+        var userAgent = window.navigator.userAgent;
+        var width = 0;
+        var height = 0;
+
+        // Mobile
+        if (userAgent.indexOf('Mobile') !== -1) {
+          width = window.screen.width - 40;
+          height = window.screen.height;
+        } else {
+          width = 1000;
+          height = 630;
+        }
+
+        return {
+          width: width,
+          height: height
+        }
+      }
+
+      function getExtraDataByKey(key) {
+        var search = window.location.search;
+        var reg = new RegExp(`${key}=([^\&]*)`);
+        var result = search.match(reg);
+
+        return result && result.length >= 1 ? result[1] : '';
+      }
+
+      function initListeners() {
+        $panelImage.on('tap', function () {
+          $upload.trigger('click');
+        });
+
+        $upload.on('change', function () {
+          var size = getRenderSize();
+
+          emiya.setFile(this.files[0]);
+          emiya.render(emiyaCanvasEl, {
+            width: size.width,
+            height: size.height,
+            quality: .8
+          }, function (response) {
+            var base64 = response.base64;
+
+            imageSize.width = response.width;
+            imageSize.height = response.height;
+            previewImage.src = base64;
+            $('#image-placeholder').addClass('hidden');
+          });
+        });
+
+        $('#btn-confirm').on('tap', function () {
+          resolveLoading.classList.remove('hidden');
+        });
+
+        $('#reload').on('tap', function () {
+          window.location.reload();
+        });
+
+
+        $('#select-type').on('change', function () {
+          var options = this.options;
+          var select = options[options.selectedIndex];
+
+          type = select.value;
+        });
+      };
+
+      window.ocr = function () {
+          if (!$('#document-positive').find('img').get(0) && !$('#document-negative').find('img').get(0)) {
+              alert('请先上传证件照');
+              return;
+            }
+            getDocumentPositive(type);
+      }
+
+      /**
+       * 获取OCR - panel
+       * @param {String} type sfz or yyzz
+       */
+      function getDocumentPositive(type) {
+        var img = $('#document-positive').find('img').get(0);
+        var src = img.src;
+        var picture = null;
+
+        if (!img) {
+          return;
+        }
+
+        if (src.indexOf('base64') === -1) {
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext('2d');
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          picture = canvas.toDataURL('image/png')
+        } else {
+          picture = src;
+        }
+
+        var ocrResultEl = document.getElementById('ocr-result');
+        $.ajax({
+          url: inputServerUrl.value + 'recognize',
+          data: JSON.stringify({
+            picture: picture.match(/base64,(.*)/)[1],
+            type: type
+          }),
+          type: 'post',
+          dataType: 'json',
+          contentType: 'application/json',
+          success: function (response) {
+              ocrResultEl.classList.remove('hidden');
+              document.getElementById('panel-positive').innerHTML = 'OCR识别结果：' + JSON.stringify(response);
+            window.scrollTo(0, 2000);
+          },
+          error: function () {
+            console.error('获取OCR数据失败');
+          }
+        });
+      }
+
+      window.demoimageshow = function () {
+
+        //TODO 根据select 值，设置不同照展示
+        switch (type) {
+          case '0':
+            previewImage.src = './demo/ocr_0.jpg';
+            break;
+
+          case '1':
+            previewImage.src = './demo/ocr_1.jpg';
+            break;
+
+          case '2':
+            previewImage.src = './demo/ocr_2.jpg';
+            break;
+
+          case '3':
+            previewImage.src = './demo/ocr_3.png';
+            break;
+
+          case '4':
+            previewImage.src = './demo/ocr_4.jpg';
+            break;
+
+          case '5':
+            previewImage.src = './demo/ocr_5.jpg';
+            break;
+        }
+
+        $('#image-placeholder').addClass('hidden');
+      }
+
+      initListeners();
+    }));
+  </script>
+</body>
+
+</html>
